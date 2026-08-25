@@ -1,0 +1,34 @@
+# ---- Secrets -------------------------------------------------------------
+.env
+/config/.env
+*.pem
+!config/cacert.pem
+
+# ---- Dependencies --------------------------------------------------------
+/vendor/
+/node_modules/
+
+# ---- Runtime artefacts ---------------------------------------------------
+/storage/logs/*.log
+/backups/
+
+# ---- Archives ------------------------------------------------------------
+*.zip
+*.tar.gz
+*.tgz
+*.rar
+
+# ---- OS cruft ------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Editors / IDEs ------------------------------------------------------
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.fleet/
+nbproject/
+*.swp
+*~
