@@ -1,0 +1,28 @@
+-- Payments
+CREATE TABLE IF NOT EXISTS payments (
+    id                   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    internal_id          VARCHAR(40)     NOT NULL COMMENT 'internal id (sent as externalReference to the gateway)',
+    external_id          VARCHAR(80)     NULL COMMENT 'charge id on the gateway',
+    product_id           BIGINT UNSIGNED NOT NULL,
+    customer_name        VARCHAR(150)    NOT NULL,
+    customer_email       VARCHAR(190)    NOT NULL,
+    customer_phone       VARCHAR(20)     NULL,
+    customer_doc         VARCHAR(20)     NOT NULL,
+    customer_external_id VARCHAR(80)     NULL COMMENT 'customer id on the gateway',
+    gross_cents          INT UNSIGNED    NOT NULL,
+    fee_cents            INT UNSIGNED    NOT NULL DEFAULT 0,
+    net_cents            INT UNSIGNED    NOT NULL DEFAULT 0,
+    method               ENUM('pix','cartao') NOT NULL,
+    status               ENUM('pendente','pago','recusado','cancelado','estornado') NOT NULL DEFAULT 'pendente',
+    idempotency_key      VARCHAR(80)     NOT NULL,
+    created_at           DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    paid_at              DATETIME        NULL,
+    updated_at           DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_payments_internal (internal_id),
+    UNIQUE KEY uq_payments_idempotency (idempotency_key),
+    KEY idx_payments_external (external_id),
+    KEY idx_payments_status (status),
+    KEY idx_payments_product (product_id),
+    CONSTRAINT fk_payments_product FOREIGN KEY (product_id) REFERENCES products (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
